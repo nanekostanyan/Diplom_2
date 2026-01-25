@@ -3,6 +3,7 @@ package createorder;
 import helper.BaseTest;
 import helper.OrderApi;
 import helper.UserApi;
+import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import org.junit.After;
 import org.junit.Before;
@@ -46,7 +47,7 @@ public class CreateOrderWParamsTest extends BaseTest {
         userApi.deleteUser();
     }
 
-    @Parameterized.Parameters(name = "{0}")
+    @Parameterized.Parameters(name = "Оформляем заказ: {0}")
     @Step("Получаем параметры теста")
     public static Object[] getFields() {
         return new Object[][] {
@@ -93,8 +94,9 @@ public class CreateOrderWParamsTest extends BaseTest {
     }
 
     @Test
-    @Step("Оформляем заказ")
-    public void CreateOrderWParams() {
+    @Description("Параметризованный тест. Оформляем заказ под авторизованным и неавторизованным пользователем, с разным " +
+            "количеством ингредиентов, а также, проверяем кейс с передачей невалидного хеша ингредиента.")
+    public void createOrderWParams() {
         List<String> ingredientHashes = orderApi.createIngredientHashes(countOfIngredients, needCorruptHash);
 
         if (isAuthorize) {

@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.Assert.*;
 
-public class IngredientsApi extends Helper {
+public class IngredientsApi extends BaseApi {
     private List<Ingredient> ingredients;
 
     private final String INGREDIENTS_HANDLE = "/api/ingredients/";
@@ -47,6 +47,6 @@ public class IngredientsApi extends Helper {
 
     @Step("Получаем хеш ингредиента по его индексу")
     public String getIngredientID(int i) {
-        return getIngredient(i).get_id();
+        return getIngredient(i).getId();
     }
 }

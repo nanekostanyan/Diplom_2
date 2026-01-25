@@ -2,7 +2,9 @@ package registeruser;
 
 import helper.BaseTest;
 import helper.UserApi;
+import io.qameta.allure.Description;
 import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +29,7 @@ public class RegisterUserWoFieldsTest extends BaseTest {
         this.removeName = removeName;
     }
 
-    @Parameterized.Parameters(name = "{0}")
+    @Parameterized.Parameters(name = "Безуспешная попытка регистрации пользователя без обязательных полей: {0}")
     @Step("Получаем параметры теста")
     public static Object[] getFields() {
         return new Object[][] {
@@ -69,7 +71,8 @@ public class RegisterUserWoFieldsTest extends BaseTest {
     }
 
     @Test
-    @Step("Безуспешная попытка регистрации пользователя без обязательных полей")
+    @Description("Параметризованный тест. Пробуем зарегистрировать нового пользователя, не передавая обязательные " +
+            "поля Email, Name и Password.")
     public void registerUserWoField() {
         userApi.registerUser(request);
 

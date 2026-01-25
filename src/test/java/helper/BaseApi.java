@@ -2,14 +2,18 @@ package helper;
 
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+import net.datafaker.Faker;
 
-import java.util.Random;
+import java.util.Locale;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 
-public class Helper {
+public class BaseApi {
     protected Response response;
+    protected static final Faker faker = new Faker(Locale.ENGLISH);
+
+    private final String EMAIL_DOMAIN_NAME = "@yandex.ru";
 
     @Step("Проверяем код ответа")
     public void checkResponseSC(int sc) {
@@ -25,14 +29,12 @@ public class Helper {
 
     @Step("Генерируем случайную строку заданной длины")
     protected String generateRandomString(int length) {
-        String characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < length; i++) {
-            int index = random.nextInt(characterSet.length());
-            sb.append(characterSet.charAt(index));
-        }
-        return sb.toString();
+        return faker.regexify(String.format("[a-zA-Z0-9]{%d}", length));
+    }
+
+    @Step("Генерируем случайный Email заданной длины")
+    protected String generateRandomEmail(int length) {
+        return generateRandomString(length) + EMAIL_DOMAIN_NAME;
     }
 
     @Step("Получаем код ответа")

@@ -2,9 +2,6 @@ package helper;
 
 import io.qameta.allure.Step;
 import pojo.*;
-import registeruser.RegisterUserTest;
-
-import java.util.Random;
 
 import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_ACCEPTED;
@@ -13,18 +10,19 @@ import static org.hamcrest.text.IsEmptyString.emptyString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class UserApi extends Helper {
+public class UserApi extends BaseApi {
     private UserRegisterRequest lastRegisterRequest;
     private UserRegisterResponse lastRegisterResponse;
     private String registerAccessToken;
 
-    private final String REGISTER_HANDLE = "/api/auth/register/";
-    private final String LOGIN_USER_HANDLE = "/api/auth/login/";
-    private final String DELETE_USER_HANDLE = "/api/auth/user/";
+    private final static String REGISTER_HANDLE = "/api/auth/register/";
+    private final static String LOGIN_USER_HANDLE = "/api/auth/login/";
+    private final static String DELETE_USER_HANDLE = "/api/auth/user/";
 
-    private final int MIN_SIZE_OF_RANDOM_STRING = 5;
-    private final int ADDITIONAL_RANGE_OF_RANGE_STRING = 10;
-    private final String EMAIL_DOMAIN_NAME = "@yandex.ru";
+    private final static int MIN_SIZE_OF_RANDOM_STRING = 5;
+    private final static int MAX_SIZE_OF_RANDOM_STRING = 15;
+
+    private final static String INCORRECT_EMAIL_OR_PASSWORD_ERROR_MESSAGE = "email or password are incorrect";
 
     // Методы запросов
 
@@ -120,6 +118,12 @@ public class UserApi extends Helper {
         assertEquals("Name из ответа при регистрации не совпадает с Name из ответа на авторизацию", loginUser.getName(), registerUser.getName());
     }
 
+    @Step("Проверяем что поле Message ответа содержит ожидаемую ошибку")
+    public void isMessageHasEmailPasswordError() {
+        assertNotNull(response);
+        response.then().assertThat().body("message", equalTo(INCORRECT_EMAIL_OR_PASSWORD_ERROR_MESSAGE));
+    }
+
     // Вспомогательные методы
 
     @Step("Сохраняем ответ регистрации. Будет использован для логина, сверки полей и послетестового удаления пользователя")
@@ -132,10 +136,11 @@ public class UserApi extends Helper {
 
     @Step("Генерируем запрос для регистрации со случайными значениями")
     public UserRegisterRequest createRegisterRequest() {
-        Random rand = new Random();
-        String email = generateRandomString(rand.nextInt(ADDITIONAL_RANGE_OF_RANGE_STRING) + MIN_SIZE_OF_RANDOM_STRING) + EMAIL_DOMAIN_NAME;
-        String name = generateRandomString(rand.nextInt(ADDITIONAL_RANGE_OF_RANGE_STRING) + MIN_SIZE_OF_RANDOM_STRING);
-        String password = generateRandomString(rand.nextInt(ADDITIONAL_RANGE_OF_RANGE_STRING) + MIN_SIZE_OF_RANDOM_STRING);
+        int length = faker.random().nextInt(MIN_SIZE_OF_RANDOM_STRING, MAX_SIZE_OF_RANDOM_STRING);
+
+        String email = generateRandomEmail(length);
+        String name = generateRandomString(length);
+        String password = generateRandomString(length);
 
         return new UserRegisterRequest(email, password, name);
     }

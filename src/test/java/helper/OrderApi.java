@@ -10,7 +10,7 @@ import java.util.Random;
 
 import static io.restassured.RestAssured.given;
 
-public class OrderApi extends Helper {
+public class OrderApi extends BaseApi {
     private final IngredientsApi ingredientsApi = new IngredientsApi();
 
     private final String CREATE_ORDER_HANDLE = "/api/orders/";

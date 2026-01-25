@@ -2,7 +2,9 @@ package registeruser;
 
 import helper.BaseTest;
 import helper.UserApi;
+import io.qameta.allure.Description;
 import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import org.hamcrest.MatcherAssert.*;
 import org.junit.After;
 import org.junit.Test;
@@ -21,7 +23,8 @@ public class RegisterUserTest extends BaseTest {
     }
 
     @Test
-    @Step("Регистрируем нового уникального пользователя")
+    @DisplayName("Регистрируем нового уникального пользователя")
+    @Description("Отправляем запрос на регистрацию нового пользователя, с уникальными сгенерированными данными.")
     public void registerUniqueUser() {
         userApi.registerUserAndSaveToken();
 
@@ -32,7 +35,9 @@ public class RegisterUserTest extends BaseTest {
     }
 
     @Test
-    @Step("Повторно регистрируем того же пользователя")
+    @DisplayName("Повторно регистрируем того же пользователя")
+    @Description("Создаём нового пользователя, после чего повторяем запрос на создание пользователя с теми же данными. " +
+            "Ожидаем получить ошибку.")
     public void registerSameUser() {
         userApi.registerUserAndSaveToken();
 
@@ -43,5 +48,6 @@ public class RegisterUserTest extends BaseTest {
 
         userApi.checkResponseSC(SC_FORBIDDEN);
         userApi.checkSuccessStatus(false);
+        userApi.checkMessageNotEmpty();
     }
 }

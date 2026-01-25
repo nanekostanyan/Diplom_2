@@ -2,7 +2,9 @@ package loginuser;
 
 import helper.BaseTest;
 import helper.UserApi;
+import io.qameta.allure.Description;
 import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +30,8 @@ public class LoginUserTest extends BaseTest {
     }
 
     @Test
-    @Step("Успешная авторизация пользователя с валидными данными")
+    @DisplayName("Успешная авторизация пользователя с валидными данными")
+    @Description("Отправляем запрос на авторизацию, передавая валидные данные.")
     public void loginAsExistingUser() {
         userApi.loginUser();
 

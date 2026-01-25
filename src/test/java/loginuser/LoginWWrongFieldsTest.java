@@ -2,7 +2,9 @@ package loginuser;
 
 import helper.BaseTest;
 import helper.UserApi;
+import io.qameta.allure.Description;
 import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +28,7 @@ public class LoginWWrongFieldsTest extends BaseTest {
         this.ruinPassword = ruinPassword;
     }
 
-    @Parameterized.Parameters(name = "{0}")
+    @Parameterized.Parameters(name = "Попытка авторизации с некорректными данными: {0}")
     @Step("Получаем параметры теста")
     public static Object[] getFields() {
         return new Object[][] {
@@ -64,11 +66,12 @@ public class LoginWWrongFieldsTest extends BaseTest {
     }
 
     @Test
-    @Step("Попытка авторизации с некорректными данными")
+    @Description("Параметризованный тест. Пробуем авторизоваться, передавая некорректные Email и Password.")
     public void loginWWrongEmailAndPassword() {
         userApi.loginUser(request);
 
         userApi.checkResponseSC(SC_UNAUTHORIZED);
         userApi.checkSuccessStatus(false);
+        userApi.isMessageHasEmailPasswordError();
     }
 }
