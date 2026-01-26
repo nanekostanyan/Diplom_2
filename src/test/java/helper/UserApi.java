@@ -23,6 +23,8 @@ public class UserApi extends BaseApi {
     private final static int MAX_SIZE_OF_RANDOM_STRING = 15;
 
     private final static String INCORRECT_EMAIL_OR_PASSWORD_ERROR_MESSAGE = "email or password are incorrect";
+    private final static String USER_ALREADY_EXISTED_ERROR_MESSAGE = "User already exists";
+    private final static String NOT_ALL_REQUIRED_FIELDS_ERROR_MESSAGE = "Email, password and name are required fields";
 
     // Методы запросов
 
@@ -118,10 +120,22 @@ public class UserApi extends BaseApi {
         assertEquals("Name из ответа при регистрации не совпадает с Name из ответа на авторизацию", loginUser.getName(), registerUser.getName());
     }
 
-    @Step("Проверяем что поле Message ответа содержит ожидаемую ошибку")
+    @Step("Проверяем что поле Message ответа содержит ошибку некорректного поля Password или Email")
     public void isMessageHasEmailPasswordError() {
         assertNotNull(response);
         response.then().assertThat().body("message", equalTo(INCORRECT_EMAIL_OR_PASSWORD_ERROR_MESSAGE));
+    }
+
+    @Step("Проверяем что поле Message ответа содержит ошибку, говорящую что такой пользователь уже существует")
+    public void isUserAlreadyExistedError() {
+        assertNotNull(response);
+        response.then().assertThat().body("message", equalTo(USER_ALREADY_EXISTED_ERROR_MESSAGE));
+    }
+
+    @Step("Проверяем что поле Message ответа содержит ошибку, говорящую что не все обязательные поля были переданы в запросе")
+    public void isNotAllRequiredFieldsError() {
+        assertNotNull(response);
+        response.then().assertThat().body("message", equalTo(NOT_ALL_REQUIRED_FIELDS_ERROR_MESSAGE));
     }
 
     // Вспомогательные методы

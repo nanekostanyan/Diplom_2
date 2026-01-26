@@ -48,6 +48,6 @@ public class RegisterUserTest extends BaseTest {
 
         userApi.checkResponseSC(SC_FORBIDDEN);
         userApi.checkSuccessStatus(false);
-        userApi.checkMessageNotEmpty();
+        userApi.isUserAlreadyExistedError();
     }
 }

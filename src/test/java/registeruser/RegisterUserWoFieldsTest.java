@@ -78,6 +78,6 @@ public class RegisterUserWoFieldsTest extends BaseTest {
 
         userApi.checkResponseSC(SC_FORBIDDEN);
         userApi.checkSuccessStatus(false);
-        userApi.checkMessageNotEmpty();
+        userApi.isNotAllRequiredFieldsError();
     }
 }
